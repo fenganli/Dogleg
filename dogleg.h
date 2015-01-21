@@ -2,6 +2,8 @@
 #define dog_leg_h
 #include <vector>
 #include <math.h>
+using namespace std;
+const double eps = 1e-8
 class Dog_leg
 {
 	private:
@@ -16,24 +18,16 @@ class Dog_leg
 	double t;
 
 	//below are some helper functions
-	getPu();
-	getPb();
-	double getT();
+	void getPu();
+	void getPb();
 	public:
-	Dog_leg(vector<double> & derivative, vector<vector<double> > heissan);
+	Dog_leg(vector<double> & deri, vector<vector<double> > hei, double rad);
 	vector<double> getDirection();
 };
 //below are some helper functions
 //probably there are some generous methods, but here I just hard code it for the case of dimension 2
-/bin/bash: pbcopy: command not found
-double getLength(vector<double> inputVec)
-{
-	double length = 0;
-	int dimension = inputVec.size();
-	for (int i = 0; i < dimension; i++)
-		length += inputVec[i] * inputVec[i];
-	return sqrt(length);
-}
+vector<vector<double> > getInverse(vector<vector<double> > & heissan);
+double getLength(vector<double> inputVec);
 #endif
 
 

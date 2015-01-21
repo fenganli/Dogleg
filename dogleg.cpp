@@ -1,12 +1,51 @@
 #include  "dogleg.h"
-Dog_leg::Dog_leg(vector<double> & deri, vector<vector<double> > hei, double rad) derivative(deri), heissan(hei), radius(rad){} 
+Dog_leg::Dog_leg(vector<double> & deri, vector<vector<double> > hei, double rad): derivative(deri), heissan(hei), radius(rad){} 
 
 //in this function, we can find the direction of the 
 vector<double> Dog_leg::getDirection()
 {
+	getPu();
+	getPb();
+	if (getLength(pb) <= radius) //if the minimum is already inside the circle
+	{
+		t = 2;
+		return pb;
+	}
 
+	int dimension = pb.size();
+
+	double puLen = getLength(pu);
+	if (puLen >= radius) //courner case
+	{
+		t = radius / puLen;
+		vector<double> pk;
+		for (int i = 0; i < dimension; i++)
+			pk.push_back(pu[i] * radius / puLen);
+		return pk;
+	}
+
+	double a = 0, b = 0, c = 0; //the coefficients for quadratic function
+	//below we calculate the coefficients
+	for (int i = 0; i < dimension; i++)
+	{
+		a += pow((pb[i] - pu[i]), 2);
+		b += 2 * (2 * pu[i] - pb[i]) * (pb[i] - pu[i]);
+		c += pow((2 * pu[i] - pb[i]), 2);
+	}
+	c -= radius * radius;
+	//the degree 2 coefficient must exist
+	double t1 = (-b+sqrt(b * b - 4 * a * c)) / (2 * a);
+	double t2 = (-b-sqrt(b * b - 4 * a * c)) / (2 * a);
+	if (t1 > 1 && t1 < 2)
+		t = t1;
+	else if (t2 > 1 && t2 < 2)
+		t = t2;
+	vector<double> pk;
+	for (int i = 0; i < dimension; i++)
+		pk.push_back(pu[i] + (t - 1) *(pb[i] - pu[i]));
+	return pk;
 }
-Dog_leg::getPu()
+void Dog_leg::getPu()
 {
 	int dimension = derivative.size();
 	double nominator = 0;
@@ -20,7 +59,7 @@ Dog_leg::getPu()
 	for (int i = 0; i < dimension; i++)
 		pu[i] = lambda * derivative[i];
 }
-Dog_leg::getPb()
+void Dog_leg::getPb()
 {
 	vector<vector<double> > inverseHei = getInverse(heissan);
 	int dimension = derivative.size();
@@ -31,7 +70,7 @@ Dog_leg::getPb()
 			pb[i] -= inverseHei[i][j] * derivative[j];
 	}
 }
-vector<vector<double> > getInverse(vector<vector<double> & heissan)
+vector<vector<double> > getInverse(vector<vector<double> > & heissan)
 {
 	double a = heissan[0][0];
 	double b = heissan[0][1];
@@ -49,4 +88,11 @@ vector<vector<double> > getInverse(vector<vector<double> & heissan)
 	invHeissan.push_back(row1);
 	return invHeissan;
 }
-
+double getLength(vector<double> inputVec)
+{
+	double length = 0;
+	int dimension = inputVec.size();
+	for (int i = 0; i < dimension; i++)
+		length += inputVec[i] * inputVec[i];
+	return sqrt(length);
+}
