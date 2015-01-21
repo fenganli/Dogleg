@@ -3,7 +3,7 @@
 #include <vector>
 #include <math.h>
 using namespace std;
-const double eps = 1e-8
+const double eps = 1e-8;
 class Dog_leg
 {
 	private:
@@ -21,7 +21,7 @@ class Dog_leg
 	void getPu();
 	void getPb();
 	public:
-	Dog_leg(vector<double> & deri, vector<vector<double> > hei, double rad);
+	Dog_leg(vector<double>  deri, vector<vector<double> > hei, double rad);
 	vector<double> getDirection();
 };
 //below are some helper functions

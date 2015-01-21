@@ -1,5 +1,5 @@
 #include  "dogleg.h"
-Dog_leg::Dog_leg(vector<double> & deri, vector<vector<double> > hei, double rad): derivative(deri), heissan(hei), radius(rad){} 
+Dog_leg::Dog_leg(vector<double>  deri, vector<vector<double> > hei, double rad): derivative(deri), heissan(hei), radius(rad){} 
 
 //in this function, we can find the direction of the 
 vector<double> Dog_leg::getDirection()
@@ -57,7 +57,7 @@ void Dog_leg::getPu()
 			denominator += derivative[i] * heissan[i][j] * derivative[j];
 	double lambda = (0 - nominator) / denominator;
 	for (int i = 0; i < dimension; i++)
-		pu[i] = lambda * derivative[i];
+		pu.push_back(lambda * derivative[i]);
 }
 void Dog_leg::getPb()
 {
@@ -65,7 +65,7 @@ void Dog_leg::getPb()
 	int dimension = derivative.size();
 	for (int i = 0; i < dimension; i++)
 	{
-		pb[i] = 0;
+		pb.push_back(0);
 		for (int j = 0; j < dimension; j++)
 			pb[i] -= inverseHei[i][j] * derivative[j];
 	}
